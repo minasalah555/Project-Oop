@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="FacultyManagementSystemImproved" default="compile" basedir=".">
+    <description>
+        Improved Faculty Management System with better OOP design
+    </description>
+
+    <!-- Properties -->
+    <property name="src.dir" value="."/>
+    <property name="build.dir" value="build"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="jar.dir" value="${build.dir}/jar"/>
+    <property name="main.class" value="FacultyManagementSystem"/>
+    <property name="jar.file" value="${jar.dir}/FacultyManagementSystem.jar"/>
+
+    <!-- Classpath -->
+    <path id="classpath">
+        <fileset dir="${classes.dir}"/>
+    </path>
+
+    <!-- Clean target -->
+    <target name="clean" description="Clean build directories">
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <!-- Init target -->
+    <target name="init" depends="clean">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${classes.dir}"/>
+        <mkdir dir="${jar.dir}"/>
+        <mkdir dir="data"/>
+    </target>
+
+    <!-- Compile target -->
+    <target name="compile" depends="init" description="Compile Java sources">
+        <javac srcdir="${src.dir}" 
+               destdir="${classes.dir}"
+               includeantruntime="false"
+               debug="true"
+               source="11"
+               target="11">
+            <include name="**/*.java"/>
+        </javac>
+        <echo message="Compilation completed successfully!"/>
+    </target>
+
+    <!-- JAR target -->
+    <target name="jar" depends="compile" description="Create JAR file">
+        <jar destfile="${jar.file}" basedir="${classes.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="${main.class}"/>
+                <attribute name="Implementation-Title" value="Faculty Management System"/>
+                <attribute name="Implementation-Version" value="2.0"/>
+                <attribute name="Built-By" value="${user.name}"/>
+            </manifest>
+        </jar>
+        <echo message="JAR file created: ${jar.file}"/>
+    </target>
+
+    <!-- Run target -->
+    <target name="run" depends="compile" description="Run the application">
+        <java classname="${main.class}" 
+              classpath="${classes.dir}"
+              fork="true">
+        </java>
+    </target>
+
+    <!-- Run JAR target -->
+    <target name="run-jar" depends="jar" description="Run the JAR file">
+        <java jar="${jar.file}" fork="true"/>
+    </target>
+
+    <!-- All target -->
+    <target name="all" depends="clean,compile,jar" description="Clean, compile and create JAR"/>
+
+    <!-- Help target -->
+    <target name="help" description="Show available targets">
+        <echo message="Available targets:"/>
+        <echo message="  clean     - Clean build directories"/>
+        <echo message="  compile   - Compile Java sources"/>
+        <echo message="  jar       - Create JAR file"/>
+        <echo message="  run       - Run the application"/>
+        <echo message="  run-jar   - Run the JAR file"/>
+        <echo message="  all       - Clean, compile and create JAR"/>
+        <echo message="  help      - Show this help"/>
+    </target>
+
+</project>
